@@ -7,28 +7,35 @@ class Investor {
     this.id = profile.id;
     this.name = profile.name;
     this.positions = positions;
+
+    this.sortByDate()
   }
 
-  filter(type, value){
+   filtering(type, value){
 
     let filterData;
 
     switch (type) {
-
       case 'currency' : {
-        filterData = this.positions.positions.filter(v => v.currency === value);
+        filterData = this.positions.filter(v => v.currency === value.toUpperCase());
         break;
       }
-      case 'value' : {
-        filterData = this.positions.positions.filter(v => v.value < value);
+      case 'value-above' : {
+        log.info('value',  this.positions)
+        filterData = this.positions.filter(v => v.value > parseInt(value));
+        break;
+      }
+      case 'value-below' : {
+        log.info('value',  this.positions)
+        filterData = this.positions.filter(v => v.value < parseInt(value));
         break;
       }
     }
-    return filterData;
+     return {id:this.id, name: this.name, positions:filterData};
   }
 
   sortByDate(dir){
-    this.position = this.positions.sort(function(a,b){
+    this.positions = this.positions.sort(function(a,b){
       a = new Date(a.date);
       b = new Date(b.date);
       if(dir === 'decs' ) {
@@ -38,6 +45,8 @@ class Investor {
         return a < b ? -1 : a > b ? 1 : 0;
       }
     })
+
+    return {id:this.id, name: this.name, positions:this.positions};
   }
 }
 
@@ -80,6 +89,38 @@ export default (app) => {
           const investorPosition = new Investor(investor,filterByInvestor);
           res.json(investorPosition);
         });
+    });
+  })
+
+  app.get('/portfolios/investor/:id/filter/:type/:value', (req, res) => {
+    log.info('/ get investor details');
+    const id =  req.params['id'];
+    const type =  req.params['type'];
+    const value =  req.params['value'];
+    db.connect().then((resolve, reject) => {
+      resolve.load().then((resolve,reject)=> {
+        const data = resolve;
+        const investor = data.portfolios.filter(v => v.id === parseInt(id))[0];
+        const filterByInvestor = data.positions.filter(v => v.portfolioId === parseInt(id) );
+        const investorPosition = new Investor(investor,filterByInvestor);
+        res.json(investorPosition.filtering(type,value));
+      });
+    });
+  })
+
+  app.get('/portfolios/investor/:id/sort/:type/:dir', (req, res) => {
+    log.info('/ get investor details');
+    const id =  req.params['id'];
+    const type =  req.params['type'];
+    const dir =  req.params['dir'];
+    db.connect().then((resolve, reject) => {
+      resolve.load().then((resolve,reject)=> {
+        const data = resolve;
+        const investor = data.portfolios.filter(v => v.id === parseInt(id))[0];
+        const filterByInvestor = data.positions.filter(v => v.portfolioId === parseInt(id) );
+        const investorPosition = new Investor(investor,filterByInvestor);
+        res.json(investorPosition.sortByDate(type,dir));
+      });
     });
   })
 };

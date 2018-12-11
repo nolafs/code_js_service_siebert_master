@@ -23,3 +23,31 @@
 * You can add any libraries or configuration you choose.
 * Your favourite editor is probably the best choice so you are comfortable.
 * There are no "intentional" bugs, we are not trying to catch you out, it probably really is a bug so please let us know and give us the fix.
+
+
+## Endpoints
+
+#### Get all data
+
+[http://localhost:8085/portfolios](http://localhost:8085/portfolios)
+
+
+#### Get by investor and all positions
+
+[http://localhost:8085/portfolios/investor/1](http://localhost:8085/portfolios/investor/1)
+
+Data is sorted by Date.
+
+
+#### Get by investor and filter by currency
+
+[http://localhost:8085/portfolios/investor/1/filter/currency/eur](http://localhost:8085/portfolios/investor/1/filter/currency/eur)
+
+
+#### Get by investor and filter by value
+
+[http://localhost:8085/portfolios/investor/1/filter/value-above/0](http://localhost:8085/portfolios/investor/1/filter/value-above/0)
+
+[http://localhost:8085/portfolios/investor/1/filter/value-below/0](http://localhost:8085/portfolios/investor/1/filter/value-above/0)
+
+#### Get by investor and sort by date
