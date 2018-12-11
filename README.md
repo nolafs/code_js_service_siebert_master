@@ -51,3 +51,5 @@ Data is sorted by Date.
 [http://localhost:8085/portfolios/investor/1/filter/value-below/0](http://localhost:8085/portfolios/investor/1/filter/value-above/0)
 
 #### Get by investor and sort by date
+
+[http://localhost:8085/portfolios/investor/1/sort/date/decs](http://localhost:8085/portfolios/investor/1/sort/date/decs)
